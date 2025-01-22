@@ -15,7 +15,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
                 sendResponse({ status: "success" });
             });
         });
-        return true; // 非同期処理のため、true を返す
+        return true;
     }
 
     if (message.action === "getSites") {
@@ -64,7 +64,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
                 sendResponse({ status: "success" });
             });
         });
-        return true;  // 非同期処理のため、true を返す
+        return true;
     }
 
     // メモを取得する
@@ -72,7 +72,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         chrome.storage.local.get("savedMemos", (data) => {
             sendResponse({ memos: data.savedMemos || [] });
         });
-        return true;  // 非同期処理のため、true を返す
+        return true;
     }
 
     // メモを削除する
@@ -85,6 +85,6 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
                 sendResponse({ status: "deleted" });
             });
         });
-        return true;  // 非同期処理のため、true を返す
+        return true;
     }
 });
