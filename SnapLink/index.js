@@ -54,16 +54,17 @@ Object.assign(addURLBtn.style, {
     bottom: "5vh",
     height: "8vh",
     width: "8vh",
-    zIndex: "10000",
+    zIndex: "1000",
     borderRadius: "50%",
     border: `1px solid ${accentColor}`,
-    background: mainColor,
+    background: subColor,
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
     fontSize: "5vh",
     color: "#fff",
     fontWeight: "bold",
+    transition: "0.3s",
     textAlign: "center",
     cursor: "pointer"
 });
@@ -82,9 +83,9 @@ Object.assign(displayURLsBtn.style, {
     height: "8vh",
     width: "8vh",
     justifyContent: "center",
-    zIndex: "1000",
+    zIndex: "10000",
     borderRadius: "5vh",
-    background: subColor,
+    background: mainColor,
     transition: "0.3s",
     cursor: "pointer",
     border: `1px solid ${accentColor}`,
@@ -323,14 +324,11 @@ function deleteSite(url) {
 
 
 
-
-
-
 function saveMemo(content) {
     chrome.storage.local.get("savedMemos", (result) => {
         const savedMemos = result.savedMemos || [];
 
-        // 新しいメモオブジェクトを作成
+        // 新しいメモ作成
         const newMemo = {
             content: content,
             timestamp: new Date().toISOString(),  // タイムスタンプを追加
@@ -338,11 +336,9 @@ function saveMemo(content) {
 
         // メモを保存
         savedMemos.push(newMemo);
-
-        // chrome.storage.local に保存
         chrome.storage.local.set({ savedMemos: savedMemos }, () => {
             console.log("メモが保存されました!");
-            showAddMemoForm();  // 保存後にメモを即反映
+            showAddMemoForm();  // 保存後に即反映
         });
     });
 }
@@ -366,18 +362,12 @@ function copyMemo(content) {
     });
 }
 
-
-
-
-
-
-
 function showAddMemoForm() {
     shadowRoot.innerHTML = "";
 
     const memoContainer = document.createElement("div");
     memoContainer.style.height = "30vh";
-    memoContainer.style.overflowY = "auto";  // スクロール可能
+    memoContainer.style.overflowY = "auto";
     memoContainer.style.padding = "1vh";
     memoContainer.style.whiteSpace = "pre-line"; // 改行を適用
 
@@ -391,7 +381,7 @@ function showAddMemoForm() {
             memoDiv.style.padding = "0.5vw";
             memoDiv.style.borderRadius = "5px";
             memoDiv.style.color = accentColor;
-            memoDiv.style.display = "flex"; // 横並びにするためにflexを使用
+            memoDiv.style.display = "flex";
 
             // メモ内容
             const memoContent = document.createElement("div");
@@ -406,8 +396,8 @@ function showAddMemoForm() {
             // コピーボタン
             const copyBtn = document.createElement("button");
             copyBtn.textContent = "コピー";
-            copyBtn.style.width = "6vw";  // 定型サイズ
-            copyBtn.style.height = "5vh"; // 定型サイズ
+            copyBtn.style.width = "6vw";
+            copyBtn.style.height = "5vh";
             copyBtn.style.marginLeft = "1vw";
             copyBtn.style.cursor = "pointer";
             copyBtn.style.background = "#3498db";
@@ -419,8 +409,8 @@ function showAddMemoForm() {
             // 削除ボタン
             const deleteBtn = document.createElement("button");
             deleteBtn.textContent = "削除";
-            deleteBtn.style.width = "6vw";  // 定型サイズ
-            deleteBtn.style.height = "5vh"; // 定型サイズ
+            deleteBtn.style.width = "6vw";
+            deleteBtn.style.height = "5vh";
             deleteBtn.style.marginLeft = "1vw";
             deleteBtn.style.cursor = "pointer";
             deleteBtn.style.background = "#e74c3c";
@@ -430,28 +420,26 @@ function showAddMemoForm() {
             deleteBtn.addEventListener("click", () => deleteMemo(index));
 
 
-            // ボタンを横並びに追加
             memoDiv.appendChild(copyBtn);
             memoDiv.appendChild(deleteBtn);
             memoContainer.appendChild(memoDiv);
         });
     });
 
-    // テキストエリアと保存ボタンのコンテナ (8vh)
     const textAreaContainer = document.createElement("div");
-    textAreaContainer.style.display = "flex";  // 横並びにするためにflexを使用
-    textAreaContainer.style.marginTop = "1vh"; // 少しの余白
+    textAreaContainer.style.display = "flex";
+    textAreaContainer.style.marginTop = "1vh";
 
     const contentInput = document.createElement("textarea");
     contentInput.placeholder = "メモ内容を入力...";
-    contentInput.style.width = "80%";  // 80%の幅を確保
-    contentInput.style.height = "9vh";  // 高さを親要素に合わせる
+    contentInput.style.width = "80%";
+    contentInput.style.height = "9vh";
     contentInput.style.fontSize = "1em";
-    contentInput.style.resize = "none";  // ユーザーによるサイズ変更を防止
+    contentInput.style.resize = "none";
 
     const saveBtn = document.createElement("button");
     saveBtn.textContent = "保存";
-    saveBtn.style.width = "18%";  // 余白を含めた定型サイズ
+    saveBtn.style.width = "18%";
     saveBtn.style.height = "10vh";
     saveBtn.style.background = subColor;
     saveBtn.style.color = accentColor;
@@ -472,12 +460,10 @@ function showAddMemoForm() {
     textAreaContainer.appendChild(contentInput);
     textAreaContainer.appendChild(saveBtn);
 
-    // メモの表示コンテナとテキストエリアを組み合わせて表示
     const siteDiv = document.createElement("div");
     siteDiv.style.marginTop = "2vh";
     siteDiv.style.padding = "1vw";
     siteDiv.style.borderRadius = "5px";
-    siteDiv.style.boxShadow = "0 2px 5px rgba(0, 0, 0, 0.1)";
     siteDiv.style.display = "block";
 
     siteDiv.appendChild(memoContainer);
@@ -488,13 +474,6 @@ function showAddMemoForm() {
     // テキストエリアにフォーカス
     contentInput.focus();
 }
-
-
-
-
-
-
-
 
 
 function showNotification(message) {
@@ -523,27 +502,27 @@ function showNotification(message) {
 
 
 motherDiv.addEventListener("mouseover", () => {
-    addURLBtn.style.background = subColor;
-    displayURLsBtn.style.right = `calc(5vw + 8vh)`; // 必要に応じて計算式を変更できます
-    memoBtn.style.bottom = `calc(5vh + 8vh)`; // 必要に応じて計算式を変更できます
-    hogeBtn.style.right = `calc(5vw + 8vh)`; // 必要に応じて計算式を変更できます
-    hogeBtn.style.bottom = `calc(5vh + 8vh)`; // 必要に応じて計算式を変更できます
+
+    displayURLsBtn.style.background = subColor;
+    addURLBtn.style.right = `calc(5vw + 8vh)`;
+    memoBtn.style.bottom = `calc(5vh + 8vh)`;
+    hogeBtn.style.right = `calc(5vw + 8vh)`;
+    hogeBtn.style.bottom = `calc(5vh + 8vh)`;
     motherDiv.style.width = "16vh";
     motherDiv.style.height = "16vh";
 });
 
 motherDiv.addEventListener("mouseout", () => {
-    addURLBtn.style.background = mainColor;
-    displayURLsBtn.style.right = "5vw";
-    memoBtn.style.bottom = "5vh"; // 必要に応じて計算式を変更できます
-    hogeBtn.style.right = "5vw"; // 必要に応じて計算式を変更できます
-    hogeBtn.style.bottom = "5vh"; // 必要に応じて計算式を変更できます
+    displayURLsBtn.style.background = mainColor;
+    addURLBtn.style.right = "5vw";
+    memoBtn.style.bottom = "5vh";
+    hogeBtn.style.right = "5vw";
+    hogeBtn.style.bottom = "5vh";
     motherDiv.style.width = "8vh";
     motherDiv.style.height = "8vh";
 });
 
 
-addURLBtn.addEventListener("click", saveSite);
 
 
 function toggleDisplay() {
@@ -553,6 +532,7 @@ function toggleDisplay() {
 }
 
 
+addURLBtn.addEventListener("click", saveSite);
 displayURLsBtn.addEventListener("click", () => {
     toggleDisplay();
     setURLs();
@@ -581,7 +561,7 @@ document.addEventListener("keydown", (event) => {
 // ----------------------------------フルスクリーンなら非表示する処理
 
 
-
+// このへんはGPT君にやってもらった
 
 
 // フルスクリーンの状態を確認する関数
@@ -600,8 +580,6 @@ function toggleMotherDivVisibility() {
         motherDiv.style.display = "block"; // フルスクリーンでない場合は表示
     }
 }
-
-
 
 document.addEventListener("fullscreenchange", toggleMotherDivVisibility);
 document.addEventListener("webkitfullscreenchange", toggleMotherDivVisibility); // Safari用
