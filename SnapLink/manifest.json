@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
     "name": "SnapLink",
-    "version": "114.514",
+    "version": "1.0",
     "description": "あとで読みたいな～って時に……",
     "permissions": [
         "activeTab",
